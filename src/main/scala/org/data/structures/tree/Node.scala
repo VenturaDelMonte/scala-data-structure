@@ -1,7 +1,12 @@
 package org.data.structures.tree
 
 
-class Node [K <% Ordered[K], T]  (_key : K, _value : T, _left : Node[K, T] = null, _right : Node[K, T] = null, _parent : Node[K, T] = null) {
+class Node [K <% Ordered[K], T]  (
+                                   _key : K,
+                                   _value : T,
+                                   _left : Node[K, T] = null,
+                                   _right : Node[K, T] = null,
+                                   _parent : Node[K, T] = null) {
 
   var key = _key
   var value = _value
