@@ -7,7 +7,7 @@ import org.scalatest.junit.JUnitRunner
 @RunWith(classOf[JUnitRunner])
 class HashmapTest extends FlatSpec with Matchers {
   "An empty hashmap" should "say it's empty" in {
-    val map : Hashmap[String, Int] = new   Hashmap[String, Int]
+    val map : Hashmap[String, Int] = new Hashmap[String, Int]
     map("none") should be (None)
   }
 

@@ -2,8 +2,6 @@ package org.data.structures.hashmap
 
 import org.data.structures.tree.{Node => Bucket}
 
-import scala.util.control.Breaks._
-
 class Hashmap [K <% Ordered[K], V] {
 
   private val BUCKETS_COUNT = 32
@@ -51,42 +49,38 @@ class Hashmap [K <% Ordered[K], V] {
 
   def update(key: K, value: V): Unit = {
     val hash = getHash(key)
-    var root = buckets(hash)
+    val root = buckets(hash)
     if (root == null) {
       buckets(hash) = new Bucket[K, V](key, value)
       length += 1
     } else {
-      breakable {
-        while (root != null) {
-          if (root.compare(key) < 0) {
-            // lt -> goes to left
-            if (root.left == null) {
-              val target = new Bucket[K, V](key, value)
-              root.left = target
-              target.parent = root
-              length += 1
-              break
-            } else {
-              root = root.left
-            }
-          } else if (root.compare(key) > 0) {
-            // gt -> goes to right
-            if (root.right == null) {
-              val target = new Bucket[K, V](key, value)
-              root.right = target
-              target.parent = root
-              length += 1
-              break
-            } else {
-              root = root.right
-            }
+      def loop(node : Bucket[K, V]): Unit = {
+        if (root.compare(key) < 0) {
+          // lt -> goes to left
+          if (root.left == null) {
+            val target = new Bucket[K, V](key, value)
+            root.left = target
+            target.parent = root
+            length += 1
           } else {
-            // eq -> update value
-            root.value = value
-            break
+           loop(root.left)
           }
+        } else if (root.compare(key) > 0) {
+          // gt -> goes to right
+          if (root.right == null) {
+            val target = new Bucket[K, V](key, value)
+            root.right = target
+            target.parent = root
+            length += 1
+          } else {
+            loop(root.right)
+          }
+        } else {
+          // eq -> update value
+          root.value = value
         }
       }
+      loop(root)
     }
   }
 
